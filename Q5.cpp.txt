@@ -1,0 +1,102 @@
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+#include<string.h>
+#include<iomanip>
+
+using namespace std;
+
+/*
+    Suppose the 2D arrays is 4*6
+*/
+
+const int rows = 4;
+const int cols = 6;
+
+
+int sumOneRow(int arr[rows][cols],int row_index)
+{
+    int sum = 0;
+    for(int j = 0 ; j<cols ; j++)
+    {
+        sum += arr[row_index][j];
+    }
+    return sum;
+}
+
+int sumOneCol(int arr[rows][cols], int col_index)
+{
+    int sum = 0;
+    for(int i = 0 ; i<rows ; i++)
+    {
+        sum+=arr[i][col_index];
+    }
+    return sum;
+}
+
+int main()
+{
+    int arr[rows][cols] = {{1,2,3,4,5,6},{0,1,2,0,0,1},{10,3,4,5,6,10},{-1,6,13,-3,2,45}};
+
+    for(int i = 0 ; i<rows ; i++)
+    {
+         for(int j = 0 ; j<cols ; j++)
+        {
+          cout << setw(4) << arr[i][j];
+        }
+        cout << " | " <<setw(3) << sumOneRow(arr,i);
+        cout <<endl;
+    }
+
+    cout << "--------------------------" <<endl;
+
+    for(int j = 0 ; j<cols ; j++)
+    {
+        cout << setw(4) << sumOneCol(arr,j) ;
+    }
+    cout <<endl;
+
+
+    int MaxRow = -999999;
+    int MaxRowIndex = -1;
+
+    for(int i = 0 ; i<rows ; i++)
+    {
+        int sumRow = sumOneRow(arr, i);
+        if(sumRow > MaxRow)
+        {
+            MaxRow = sumRow;
+            MaxRowIndex = i;
+        }
+    }
+
+    int MaxCol = -999999;
+    int MaxColIndex = -1;
+
+    for(int j = 0 ; j<cols ; j++)
+    {
+        int sumCol = sumOneCol(arr, j);
+        if(sumCol > MaxCol)
+        {
+            MaxCol = sumCol;
+            MaxColIndex = j;
+        }
+    }
+
+
+    cout << "\n\nMax Row is ROW " << MaxRowIndex << " with sum " << MaxRow <<endl<<endl;
+    cout << "Max Col is Col " << MaxColIndex << " with sum " << MaxCol <<endl <<endl;
+
+    if(MaxRow > MaxCol)
+    {
+        cout << "Row " << MaxRowIndex << " Is the King ! \n";
+    }
+    else if(MaxRow < MaxCol)
+    {
+        cout << "Col " << MaxColIndex << " Is the King ! \n";
+    }
+    else
+     cout << "All Men Are Created Equal ! \n";
+
+
+}
