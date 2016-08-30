@@ -1,0 +1,45 @@
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+#include<string.h>
+
+using namespace std;
+
+void MyIntToA(int x , char str[])
+{
+    // Initialization
+    str[0] = '\0';
+    if(x < 0)
+    {
+        strcpy(str,"-");
+        // Note this is important as the ( % ) that we will use later can produce negative numbers if x is negative
+        // which will miss every thing.
+        x = -x;
+    }
+
+    char reversed_number[100] ="" ;
+    char correctNumberWithoutSign[100]="";
+
+        // Note this while loop will produce the number in reverse order
+        while(x%10 != 0)
+        {
+            char c = (x%10)+'0' ;
+            strncat(reversed_number, &c , 1);
+            x = x/10 ;
+        }
+
+        // Now reverse this number
+        int sizeOfReversedString =  strlen(reversed_number) ;
+        for(int i = 0 ; i<sizeOfReversedString ; i++)
+        {
+           correctNumberWithoutSign[i] = reversed_number[sizeOfReversedString-i-1];
+        }
+
+        strcat(str,correctNumberWithoutSign);
+}
+int main()
+{
+    char str[100];
+    MyIntToA(-1234,str);
+    cout << str <<endl;
+}
