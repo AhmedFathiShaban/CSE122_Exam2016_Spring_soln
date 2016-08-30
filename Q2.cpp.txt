@@ -1,0 +1,92 @@
+#include <iostream>
+#include<math.h>
+#include <cstdlib>
+
+using namespace std;
+
+double factorial(int n)
+{
+    if(n==1 || n == 0) return 1;
+    return n*factorial(n-1);
+}
+
+
+// FIRST , EASIER SOLUTION
+double Exam_2016_spring_q2_cos(double x, double precision)
+{
+    int parameter = 2;
+    double  first_term =  1 ; // first term
+    double  second_term =  -1 * pow(x,parameter)/factorial(parameter); // second term
+
+    double difference =  fabs(second_term-first_term);
+
+    double  sum = first_term + second_term ;
+    double previous_sum ;
+
+    int sign = 1;
+
+    while( difference > precision)
+    {
+        parameter +=2;
+        previous_sum = sum;
+        sum = previous_sum +  sign * pow(x,parameter)/factorial(parameter);
+        sign = -1 * sign ;
+        difference = fabs(sum-previous_sum) ;
+    }
+
+    return sum;
+}
+
+// SECOND , MORE OPTIMIZED BUT HARDER SOLUTION , and the DR mentioned it in the lecture
+
+double Exam_2016_spring_q2_cos_v2(double x, double precision)
+{
+
+    // NOTE The relation between each term and the next term
+    // You will find the following relation
+    //  Lets call the term number n :: term_n
+    // And call the term n-1  :: term_n_minus ;
+    // where term_0 = 1
+    // cos function now is : term_0 - term_1 + term_2 - term_3 + term_4 - ... + ... - ... etc
+    //  always :: term_n  has the  value of : pow(x,2*n)/(2*n)!
+    // SO :: term_n/term_n_minus  =   (x*x) /((2*n)*(2*n-1)) ;
+    // OR term_n = term_n_minus * ((x*x) /((2*n)*(2*n-1))) ;
+    // Use this important note in your program
+    // Dont forget that you need a sign value when you increment the sum.
+
+    /* INITIALIZATION */
+    int sign = -1 ;
+    double term_0 = 1;
+    double term_1 =  term_0 * ((x*x) /((2*1)*(2*1-1))); // using the formula
+    double previous_sum = term_0;
+    double sum = term_0 + sign * term_1;
+
+    sign = -1 * sign ;
+
+    double difference = sum - previous_sum ;
+
+
+    double term_n;
+    double term_n_minus = term_1;
+
+    for(int n=2 ; fabs(difference)>precision ; n++)
+    {
+        term_n =  term_n_minus * ((x*x) /((2*n)*(2*n-1)));
+
+        previous_sum = sum;
+        sum += sign*term_n;
+        sign = sign*-1 ;
+        difference = sum - previous_sum ; // which also equals term_n  of course !
+
+        term_n_minus = term_n;
+    }
+
+    return sum;
+}
+
+int main()
+{
+   cout << Exam_2016_spring_q2_cos_v2(3.14,.0001) <<endl;
+
+}
+
